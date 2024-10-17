@@ -107,33 +107,97 @@
 \large{\textbf{Part I}: Pen and paper}\normalsize
 
 \begin{enumerate}[leftmargin=\labelsep]
-\item Question summary can go here.
-    \begin{enumerate}
-    \item Place your solution. Math can be entered using the equation
-    environment like this
-    \begin{equation}
-        \vec{\mathbf{r}} = \vec{\mathbf{r}}_{0} + \vec{\mathbf{v}}_{0}t + \frac{1}{2}\vec{\mathbf{a}}t^{2}
-    \end{equation}
-    If you then where working in say the $x$-direction and had some numbers % A percent sign allows you to comment.
-    %The dollar signs around something in a line of text is for "in-line math"
-    \begin{equation}
-    \begin{array}{r@{~=~}l}
-    x & x_{0} + v_{x0}t + \frac{1}{2}a_{x}t^{2} \\ [2ex]
-    & 1.2~\text{m} + (4.0~\text{m/s})(3.0~\text{s}) + \frac{1}{2}(-1.0~\text{m/s}^{2})(3.0~\text{s})^{2}\\ [2ex]
-    & \boxed{8.7~\text{m}}
-    \end{array}
-    \end{equation}
+\item 
 
-    \item When you get to the next part, you can add a \verb"\item" to get the appropriate label. Also,
-    if you don't like all the equation numbers, you can use the following to have the equation with
-    no number
-    \begin{equation*}
-    \sum\vec{\mathbf{F}} = m\vec{\mathbf{a}}
-    \end{equation*}
+Given the polynomial basis function:
 
-    \item For more details on putting math into {\LaTeX} documents you can see 
-    \href{https://www.overleaf.com/learn/latex/Mathematical_expressions}{this page on Overleaf}.
-    \end{enumerate}
+\[\phi(y_1, y_2) = y_1 \times y_2\]
+
+We apply this to our input data:
+
+\begin{align*}
+x_1: \phi(1, 1) &= 1 \times 1 = 1 \\
+x_2: \phi(1, 3) &= 1 \times 3 = 3 \\
+x_3: \phi(3, 2) &= 3 \times 2 = 6 \\
+x_4: \phi(3, 3) &= 3 \times 3 = 9 \\
+x_5: \phi(2, 4) &= 2 \times 4 = 8
+\end{align*}
+
+For OLS, we need $\mathbf{X}$ (input) and $\mathbf{y}$ (output) matrices:
+
+\[\mathbf{X} = \begin{bmatrix}
+1 & 1 \\
+1 & 3 \\
+1 & 6 \\
+1 & 9 \\
+1 & 8
+\end{bmatrix}\]
+
+\[\mathbf{z} = \begin{bmatrix}
+1.25 \\
+7.0 \\
+2.7 \\
+3.2 \\
+5.5
+\end{bmatrix}\]
+
+\textbf{OLS closed form solution calculation}
+
+The OLS closed form solution is given by:
+
+\[\boldsymbol{w} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{z}\]
+
+Calculation of the separate components of formula:
+
+\[
+\mathbf{X}^T \mathbf{X} = 
+\begin{bmatrix}
+1 & 1 & 1 & 1 & 1 \\
+1 & 3 & 6 & 9 & 8
+\end{bmatrix}
+\begin{bmatrix}
+1 & 1 \\
+1 & 3 \\
+1 & 6 \\
+1 & 9 \\
+1 & 8
+\end{bmatrix}
+=
+\begin{bmatrix}
+5 & 27 \\
+27 & 191
+\end{bmatrix}
+\]
+
+\[(\mathbf{X}^T \mathbf{X})^{-1} \approx \begin{bmatrix}
+0.845 & -0.119 \\
+-0.119 & 0.022
+\end{bmatrix}\]
+
+\[\mathbf{X}^T \mathbf{z} = \begin{bmatrix}
+19.65 \\
+111.25
+\end{bmatrix}\]
+
+Finally,
+
+\[\boldsymbol{w} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{z}\]
+\[= \begin{bmatrix}
+0.845 & -0.119 \\
+-0.119 & 0.022
+\end{bmatrix} \times \begin{bmatrix}
+19.65 \\
+111.25
+\end{bmatrix}\]
+
+\[\approx \begin{bmatrix}
+3.316\\
+0.114
+\end{bmatrix}\]
+
+Therefore, the regression model in the transformed space is:
+
+\[y_{num} = 3.316 + 0.114 \times \phi(y_1, y_2)\]
 
 \item We you get to the next problem, you can end the enumerate for the parts of the previous problem and then add another item.
     \begin{enumerate}
@@ -159,3 +223,4 @@
 % ----------------------------------------------------------------------
 
 \end{document}
+
