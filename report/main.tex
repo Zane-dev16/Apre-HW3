@@ -14,6 +14,7 @@
 \usepackage[most]{tcolorbox}
 \usepackage{minted}
 \usepackage{enumitem}
+\usepackage{subcaption}
 
 \usepackage{indentfirst}
 
@@ -373,22 +374,282 @@ RMSE_{Ridge} &= \sqrt{\frac{1}{3}\sum_{i=6}^8 (y_i - \hat{y}_i)^2} \\
 
 The results show that the Ridge regression model has a lower test RMSE and a higher train RMSE compared to the original OLS model for the given train data. This shows that the original OLS model overfits more than the Ridge regression model. This aligns with our expectations as the objective of the regularization in ridge regression was so that the model overfits the training data less and generalize better for unseen data.
 
-\item We you get to the next problem, you can end the enumerate for the parts of the previous problem and then add another item.
-    \begin{enumerate}
-    \item Use a nested enumerate environment to label the parts of the next problem.
-    \item For a quick and broad overview of how to create documents in {\LaTeX} see 
-    \href{https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes}{this quick tutorial from Overleaf}.
-    \end{enumerate}
+\item \textbf{MLP Propagation:}
+
+\begin{equation*}
+  x^{[1]} = z^{[1]} = W^{[1]} x^{[0]} + b^{[1]} =
+  \begin{pmatrix}
+    0.1 & 0.1 \\
+    0.1 & 0.2 \\
+    0.2 & 0.1 
+  \end{pmatrix}
+  \begin{pmatrix}
+    1 & 1 
+  \end{pmatrix} +
+  \begin{pmatrix}
+    0.1 \\
+    0 \\
+    0.1
+  \end{pmatrix} =
+  \begin{pmatrix}
+    0.3 \\
+    0.3 \\
+    0.4
+  \end{pmatrix}
+\end{equation*}
+\begin{equation*}
+  z^{[2]} = W^{[2]} x^{[1]} + b^{[2]} =
+  \begin{pmatrix}
+    1 & 2 & 2 \\
+    1 & 2 & 1 \\
+    1 & 1 & 1
+  \end{pmatrix}
+  \begin{pmatrix}
+    0.3 \\
+    0.3 \\
+    0.4
+  \end{pmatrix} +
+  \begin{pmatrix}
+    1 \\
+    1 \\
+    1
+  \end{pmatrix} =
+  \begin{pmatrix}
+    2.7 \\
+    2.3 \\
+    2
+  \end{pmatrix}
+\end{equation*}
+
+\begin{equation*}
+  x^{[2]} = softmax(z^{[2]}) =
+  \begin{pmatrix}
+    0.46 \\
+    0.31 \\
+    0.23
+  \end{pmatrix}
+\end{equation*}
+
+Backpropagation:
+\begin{equation*}
+  \delta^{[2]}=\frac{\partial E}{\partial x^{[2]}} \circ \frac{\partial x^{[2]}}{\partial z^{[2]}} = x^{[2]} - t = 
+  \begin{pmatrix}
+    0.46 - 0 \\
+    0.31 - 1 \\
+    0.23 - 0
+    \end{pmatrix} =
+    \begin{pmatrix}
+      0.46 \\
+      -0.69 \\
+      0.23
+      \end{pmatrix}
+\end{equation*}
+
+Layer 2 weights:
+
+\begin{equation*}
+  \frac{\partial E}{\partial W^{[2]}} = \delta^{[2]} (x^{[1]})^T =
+  \begin{pmatrix}
+    0.46 \\
+    -0.69 \\
+    0.23
+    \end{pmatrix}
+    \begin{pmatrix}
+      0.3 & 0.3 & 0.4
+      \end{pmatrix} =
+      \begin{pmatrix}
+        0,14  & 0,14  & 0,18  \\
+        -0,21 & -0,21 & -0,28 \\
+        0,07  & 0,07  & 0,09
+      \end{pmatrix}
+\end{equation*}
+
+\begin{equation*}
+  W^{[2]}_{new} = W^{[2]}_{old} - \eta \frac{\partial E}{\partial W^{[2]}} =
+  \begin{pmatrix}
+    1 & 2 & 2 \\
+    1 & 2 & 1 \\
+    1 & 1 & 1
+  \end{pmatrix} - 0.1
+  \begin{pmatrix}
+    0.81 & 0.81 & 1.08 \\
+    0.39 & 0.39 & 0.52 \\
+    0.6	 & 0.6 &  0.8
+    \end{pmatrix} =
+    \begin{pmatrix}
+      0.99 & 1.99 & 1.98 \\
+      1.02 & 2.02 & 1.03 \\
+      0.99 & 0.99 & 0.99
+      \end{pmatrix}
+\end{equation*}
+
+
+Layer 2 biases:
+
+\begin{equation*}
+  \frac{\partial E}{\partial b^{[2]}} =
+  \delta^{[2]} \frac{\partial z^{[2]^T}}{\partial b^{[2]}} =
+  \delta^{[2]} =
+  \begin{pmatrix}
+    0.46 \\
+    -0.69 \\
+    0.23
+    \end{pmatrix}
+\end{equation*}
+
+\begin{equation*}
+  b^{[2]}_{new} =
+  b^{[2]}_{old} - \eta \frac{\partial E}{\partial b^{[2]}} =
+  \begin{pmatrix}
+    1 \\
+    1 \\
+    1
+    \end{pmatrix} - 0.1
+    \begin{pmatrix}
+      0.46 \\
+      -0.69 \\
+      0.23
+      \end{pmatrix} =
+    \begin{pmatrix}
+      0.95 \\
+      1.07 \\
+      0.98
+      \end{pmatrix}
+\end{equation*}
+
+Layer 1 weights:
+
+\begin{equation*}
+  \delta^{[1]}=\left( \frac{\partial z^{[2]}}{\partial x^{[1]}}\right)^T \cdot \delta^{[2]} \circ \frac{\partial x^{[1]}}{\partial z^{[1]}}=
+  (W^{[2]})^T\delta^{[2]} \times 1 =
+  \begin{pmatrix}
+    0.00  \\
+    -0.23 \\
+    0.46
+    \end{pmatrix}
+\end{equation*}
+
+\begin{equation*}
+  \frac{\partial E}{\partial W^{[1]}} = \delta^{[1]} (x^{[0]})^T =
+  \begin{pmatrix}
+    0.00  \\
+    -0.23 \\
+    0.46
+    \end{pmatrix}
+  \begin{pmatrix}
+    1 & 1
+  \end{pmatrix} =
+  \begin{pmatrix}
+    0.00  & 0.00 \\
+    -0.23 & -0.23 \\
+    0.46  & 0.46
+  \end{pmatrix}
+\end{equation*}
+
+\begin{equation*}
+  W^{[1]}_{new} = W^{[1]}_{old} - \eta \frac{\partial E}{\partial W^{[1]}} =
+  \begin{pmatrix}
+    0.1 & 0.1 \\
+    0.1 & 0.2 \\
+    0.2 & 0.1 
+  \end{pmatrix} - 0.1
+  \begin{pmatrix}
+    0.00  & 0.00 \\
+    -0.23 & -0.23 \\
+    0.46  & 0.46
+  \end{pmatrix} =
+  \begin{pmatrix}
+    0.10 & 0.10 \\
+    0.12 & 0.22 \\
+    0.15 & 0.05 
+  \end{pmatrix} 
+\end{equation*}
+
+Layer 1 biases:
+
+\begin{equation*}
+  \frac{\partial E}{\partial b^{[1]}} =
+  \delta^{[1]} \frac{\partial z^{[1]^T}}{\partial b^{[1]}} =
+  \delta^{[1]} =
+  \begin{pmatrix}
+    0.00  \\
+    -0.23 \\
+    0.46
+    \end{pmatrix}
+\end{equation*}
+
+\begin{equation*}
+  b^{[1]}_{new} =
+  b^{[1]}_{old} - \eta \frac{\partial E}{\partial b^{[1]}} =
+  \begin{pmatrix}
+    0.1 \\
+    0 \\
+    0.1
+  \end{pmatrix} - 0.1
+  \begin{pmatrix}
+    0.00  \\
+    -0.23 \\
+    0.46
+    \end{pmatrix} =
+  \begin{pmatrix}
+    0.10 \\
+    0.02 \\
+    0.05
+    \end{pmatrix}
+\end{equation*}
+
 \end{enumerate}
 
 \large{\textbf{Part II}: Programming}\normalsize
 
 \begin{enumerate}[leftmargin=\labelsep,resume]
-\item Solution to the programming questions here.
+\item  Model's boxplots.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\linewidth]{img/5_boxplot.png}
+\end{figure}
+
+\item Comparison.
+
+As we can see, Linear Regression and MLP with no activation perform pratically the same, even with 2 hidden layers of 10 neurons.
+
+The main problem with using no activation in the MLP, this is, using the linear unit, is that the model will be unable to approximate non-linear functions well, this is because an MLP without activation is in practice equivalent to linear regression.
+
+This is corroborated by the box plot, as no activation MLP performs similarly to Linear Regression, but MLP with a Rectified LU activation performs much better with a smaller MAE.
+
+\item Grid Search.
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{0.3\linewidth}
+      \centering
+      \includegraphics[width=\linewidth]{img/7_colorplot_32.png}
+      \caption{Batch size: 32}
+  \end{subfigure}
+  \hfill % Add horizontal space between subfigures
+  \begin{subfigure}{0.3\linewidth}
+      \centering
+      \includegraphics[width=\linewidth]{img/7_colorplot_64.png}
+      \caption{Batch size: 64}
+  \end{subfigure}
+  \hfill % Add horizontal space between subfigures
+  \begin{subfigure}{0.3\linewidth}
+      \centering
+      \includegraphics[width=\linewidth]{img/7_colorplot_128.png}
+      \caption{Batch size: 128}
+  \end{subfigure}
+\end{figure}
+
+According to our grid search, the best combination of hyperparameters seems to be a batch size of 32, a learning rate of 0.01 and a L2 Penalty of 0.001. With the 80-20 train-test split it performed with a Mean Absolute Error of 3.7 which is below the alternatives.
+
+With a very low learning rate of 0.001 the model doesn't seem to perform very well, and seems to not be affected by the L2 Penalty, this might be because it converges very little, since it stops at 200 iterations.
+
+A learning rate of 0.01 seems to perform usually the best, while a learning rate of 0.1 is, as expected, more chaotic than the rest.
+The batch size doesn't seem to have a big impact but smaller learning rates perform better with smaller batch sizes and larger batch sizes with greater learning rates.
+
 \end{enumerate}
 
-\vskip 1cm
-\textbf{End note}: do not forget to also submit your Jupyter notebook
 
 \newpage
 
