@@ -277,7 +277,43 @@ Ultimately the Ridge regression has reduced the sum of squared coefficients:
 This significant reduction in the sum of squared coefficients indicates a less complex model, which is likely to generalize better to unseen data.
 
 \item 
-    \textbf{OLS and Ridge prediction calculations}\\
+\textbf{OLS and Ridge prediction calculations}\\
+
+For $x_1 = (1, 1)$:
+\begin{align*}
+\phi(1, 1) &= 1 \times 1 = 1 \\
+y_{OLS} &= 3.316 + 0.114 \times 1 = 3.430 \\
+y_{Ridge} &= 1.818 + 0.324 \times 1 = 2.142
+\end{align*}
+
+For $x_2 = (1, 3)$:
+\begin{align*}
+\phi(1, 3) &= 1 \times 3 = 3 \\
+y_{OLS} &= 3.316 + 0.114 \times 3 = 3.658 \\
+y_{Ridge} &= 1.818 + 0.324 \times 3 = 2.790
+\end{align*}
+
+For $x_3 = (3, 2)$:
+\begin{align*}
+\phi(3, 2) &= 3 \times 2 = 6 \\
+y_{OLS} &= 3.316 + 0.114 \times 6 = 4.000 \\
+y_{Ridge} &= 1.818 + 0.324 \times 6 = 3.762
+\end{align*}
+
+For $x_4 = (3, 3)$:
+\begin{align*}
+\phi(3, 3) &= 3 \times 3 = 9 \\
+y_{OLS} &= 3.316 + 0.114 \times 9 = 4.342 \\
+y_{Ridge} &= 1.818 + 0.324 \times 9 = 4.734
+\end{align*}
+
+For $x_5 = (2, 4)$:
+\begin{align*}
+\phi(2, 4) &= 2 \times 4 = 8 \\
+y_{OLS} &= 3.316 + 0.114 \times 8 = 4.228 \\
+y_{Ridge} &= 1.818 + 0.324 \times 8 = 4.410
+\end{align*}
+
 
 For $x_6 = (2, 2, 0.7)$:
 \begin{align*}
@@ -300,21 +336,28 @@ y_{OLS} &= 3.316 + 0.114 \times 5 = 3.886 \\
 y_{Ridge} &= 1.818 + 0.324 \times 5 = 3.438
 \end{align*}
 
-\begin{table}[h]
-\centering
-\begin{tabular}{cccccc}
-\hline
-Observation & $y_1$ & $y_2$ & $\phi(y_1, y_2)$ & $y_{OLS}$ & $y_{Ridge}$ \\
-\hline
-$x_6$ & 2 & 2 & 4 & 3.772 & 3.114 \\
-$x_7$ & 1 & 2 & 2 & 3.544 & 2.466 \\
-$x_8$ & 5 & 1 & 5 & 3.886 & 3.438 \\
-\hline
-\end{tabular}
-\caption{Predicted values for test observations}
-\end{table}
+\textbf{Train RMSE calculation}
 
-\textbf{RMSE calculaton of both models}
+\begin{align*}
+RMSE_{OLS} &= \sqrt{\frac{1}{5}\sum_{i=1}^5 (y_i - \hat{y}_i)^2} \\
+&= \sqrt{\frac{1}{5}[(1.25 - 3.430)^2 + (7 - 3.658)^2 + (2.7 - 4.000)^2 + (3.2 - 4.342)^2 + (5.5 - 4.228)^2]} \\
+&= \sqrt{\frac{1}{5}[(-2.180)^2 + (3.342)^2 + (-1.300)^2 + (-1.142)^2 + (1.272)^2]} \\
+&= \sqrt{\frac{1}{5}[4.7524 + 11.1697 + 1.6900 + 1.3042 + 1.6188]} \\
+&= \sqrt{\frac{1}{5} \times 20.5351} \\
+&\approx 2.027
+\end{align*}
+
+\begin{align*}
+RMSE_{Ridge} &= \sqrt{\frac{1}{5}\sum_{i=1}^5 (y_i - \hat{y}_i)^2} \\
+&= \sqrt{\frac{1}{5}[(1.25 - 2.142)^2 + (7 - 2.790)^2 + (2.7 - 3.762)^2 + (3.2 - 4.734)^2 + (5.5 - 4.410)^2]} \\
+&= \sqrt{\frac{1}{5}[(-0.892)^2 + (4.210)^2 + (-1.062)^2 + (-1.534)^2 + (1.090)^2]} \\
+&= \sqrt{\frac{1}{5}[0.7953 + 17.7321 + 1.1278 + 2.3524 + 1.1881]} \\
+&= \sqrt{\frac{1}{5} \times 23.1957} \\
+&\approx 2.154
+\end{align*}
+
+
+\textbf{Test RMSE calculation}
 
 \begin{align*}
 RMSE_{OLS} &= \sqrt{\frac{1}{3}\sum_{i=6}^8 (y_i - \hat{y}_i)^2} \\
@@ -328,7 +371,7 @@ RMSE_{Ridge} &= \sqrt{\frac{1}{3}\sum_{i=6}^8 (y_i - \hat{y}_i)^2} \\
 &\approx 1.748
 \end{align*}
 
-The results show that the Ridge regression model has a lower RMSE (1.748) compared to the OLS model (2.467) for the given test data. This aligns with our expectations as the objective of the regularization in ridge regression was so that the model overfits the training data less and generalize better for unseen data.
+The results show that the Ridge regression model has a lower test RMSE and a higher train RMSE compared to the original OLS model for the given train data. This shows that the original OLS model overfits more than the Ridge regression model. This aligns with our expectations as the objective of the regularization in ridge regression was so that the model overfits the training data less and generalize better for unseen data.
 
 \item We you get to the next problem, you can end the enumerate for the parts of the previous problem and then add another item.
     \begin{enumerate}
