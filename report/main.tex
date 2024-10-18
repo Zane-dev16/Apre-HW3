@@ -199,6 +199,84 @@ Therefore, the regression model in the transformed space is:
 
 \[y_{num} = 3.316 + 0.114 \times \phi(y_1, y_2)\]
 
+\item 
+\textbf{Ridge regression closed form solution calculation}\\
+The ridge regression closed form solution with penalty factor $\lambda$ = 1 is given by:
+\[\boldsymbol{w} = (\mathbf{X}^T \mathbf{X} + \lambda \mathbf{I})^{-1} \mathbf{X}^T \mathbf{z}\]
+Calculation of the separate components of formula:
+\[
+\mathbf{X}^T \mathbf{X} = 
+\begin{bmatrix}
+1 & 1 & 1 & 1 & 1 \\
+1 & 3 & 6 & 9 & 8
+\end{bmatrix}
+\begin{bmatrix}
+1 & 1 \\
+1 & 3 \\
+1 & 6 \\
+1 & 9 \\
+1 & 8
+\end{bmatrix}
+=
+\begin{bmatrix}
+5 & 27 \\
+27 & 191
+\end{bmatrix}
+\]
+\[\mathbf{X}^T \mathbf{X} + \lambda \mathbf{I} = \begin{bmatrix}
+5 & 27 \\
+27 & 191
+\end{bmatrix} + \begin{bmatrix}
+1 & 0 \\
+0 & 1
+\end{bmatrix} = \begin{bmatrix}
+6 & 27 \\
+27 & 192
+\end{bmatrix}\]
+\[(\mathbf{X}^T \mathbf{X} + \lambda \mathbf{I})^{-1} \approx \begin{bmatrix}
+0.454 & -0.064 \\
+-0.064 & 0.014
+\end{bmatrix}\]
+\[\mathbf{X}^T \mathbf{z} = \begin{bmatrix}
+19.65 \\
+111.25
+\end{bmatrix}\]
+Finally,
+\[\boldsymbol{w} = (\mathbf{X}^T \mathbf{X} + \lambda \mathbf{I})^{-1} \mathbf{X}^T \mathbf{z}\]
+\[= \begin{bmatrix}
+0.454 & -0.064 \\
+-0.064 & 0.014
+\end{bmatrix} \times \begin{bmatrix}
+19.65 \\
+111.25
+\end{bmatrix}\]
+\[\approx \begin{bmatrix}
+1.818\\
+0.324
+\end{bmatrix}\]
+Therefore, the ridge regression model in the transformed space with $\sigma$ = 1 is:
+\[y_{num} = 1.818 + 0.324 \times \phi(y_1, y_2)\]
+
+The impact of ridge regression on the coefficients can be observed by comparing the Ordinary Least Squares (OLS) solution with the ridge regression solution (using $\lambda = 1$):
+
+\begin{align*}
+\text{OLS coefficients:} & \quad \boldsymbol{w}_{\text{OLS}} \approx \begin{bmatrix} 3.316 \\ 0.114 \end{bmatrix} \\[10pt]
+\text{Ridge coefficients:} & \quad \boldsymbol{w}_{\text{Ridge}} \approx \begin{bmatrix} 1.818 \\ 0.324 \end{bmatrix}
+\end{align*}
+
+The effects of ridge regression are as follows:
+The larger coefficient (intercept) has been substantially reduced from 3.316 to 1.818.
+The smaller coefficient increased from.
+This aligns with the primary goal of ridge regression to shrink large coefficients, which are more heavily penalized due to the quadratic regularization term.
+
+Ultimately the Ridge regression has reduced the sum of squared coefficients:
+\begin{align*}
+\text{OLS:} & \quad 3.316^2 + 0.114^2 \approx 11.00 \\
+\text{Ridge:} & \quad 1.818^2 + 0.324^2 \approx 3.41
+\end{align*}
+This significant reduction in the sum of squared coefficients indicates a less complex model, which is likely to generalize better to unseen data.
+
+
 \item We you get to the next problem, you can end the enumerate for the parts of the previous problem and then add another item.
     \begin{enumerate}
     \item Use a nested enumerate environment to label the parts of the next problem.
